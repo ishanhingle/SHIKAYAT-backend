@@ -25,6 +25,19 @@ const collegSchema=new mongoose.Schema({
         user:{
             type:mongoose.Types.ObjectId,
             ref:userModel
+        },
+        isAcknowledged:{
+            type:Boolean,
+            default:false,
+        },
+        isResolved:{
+            type:Boolean,
+            default:false,
+        },
+        remarks:{
+            type:String,
+            default:false,
         }
     }]
 })
+export const collegeModel=mongoose.model('College',collegSchema);
