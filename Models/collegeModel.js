@@ -1,11 +1,18 @@
 const mongoose=require('mongoose');
 const userModel=require('./userModel');
 const collegSchema=new mongoose.Schema({
-    name:String,
+    name:{
+        type:String,
+        required:true,
+    },
+    email:{
+       type:String,
+       required:true,
+       unique:true,
+    },
     students:[{
         type:mongoose.Types.ObjectId,
         ref:userModel,
-        require:true,
     }],
     admins:[{
         type:mongoose.Types.ObjectId,
@@ -40,4 +47,5 @@ const collegSchema=new mongoose.Schema({
         }
     }]
 })
-export const collegeModel=mongoose.model('College',collegSchema);
+const collegeModel=mongoose.model('College',collegSchema);
+module.exports=collegeModel;
