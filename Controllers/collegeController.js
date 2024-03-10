@@ -9,3 +9,11 @@ module.exports.registerCollege=catchAsync(async(req,res,next)=>{
     message:"College created successfully"
    })
 })
+// get all colleges
+module.exports.getColleges=catchAsync(async(req,res,next)=>{
+    let colleges=await collegeModel.find({});
+    colleges=colleges.map(college=>({id:college._id,name:college.name}));
+    res.status(200).json(
+        colleges
+    )
+})
