@@ -1,4 +1,6 @@
 const mongoose=require('mongoose');
+const collegeModel = require('./collegeModel');
+const compalintsModel = require('./complaintsModel');
 
 const userSchema=new mongoose.Schema({
       userName:{
@@ -11,9 +13,13 @@ const userSchema=new mongoose.Schema({
         required:true,
         unique:true
       },
+      complaints:[{
+        type:mongoose.Types.ObjectId,
+        ref:"Complaints"
+      }],
       college:{
-        type:String,
-        required:true,
+        type:mongoose.Types.ObjectId,
+        ref:"College"
       },
       role:{
         type:String,
@@ -25,7 +31,6 @@ const userSchema=new mongoose.Schema({
         required:true,
         min:[8,"password must have atleast 8 characters"]
       }
-
 })
 
 const userModel=mongoose.model("User",userSchema);

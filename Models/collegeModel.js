@@ -1,9 +1,11 @@
 const mongoose=require('mongoose');
 const userModel=require('./userModel');
+const compalintsModel = require('./complaintsModel');
 const collegSchema=new mongoose.Schema({
     name:{
         type:String,
         required:true,
+        unique:true,
     },
     email:{
        type:String,
@@ -12,39 +14,15 @@ const collegSchema=new mongoose.Schema({
     },
     students:[{
         type:mongoose.Types.ObjectId,
-        ref:userModel,
+        ref:"User"
     }],
     admins:[{
         type:mongoose.Types.ObjectId,
-        ref:userModel
+        ref:"User"
     }],
     complaints:[{
-        title:String,
-        description:String,
-        images:[{
-            url:String,
-            filename:String,
-        }],
-        department:{
-            type:String,
-            enum:['fees','scholarship','academics','sports','library','admissions','hostel','miscleanious']
-        },
-        user:{
-            type:mongoose.Types.ObjectId,
-            ref:userModel
-        },
-        isAcknowledged:{
-            type:Boolean,
-            default:false,
-        },
-        isResolved:{
-            type:Boolean,
-            default:false,
-        },
-        remarks:{
-            type:String,
-            default:false,
-        }
+       type:mongoose.Types.ObjectId,
+       ref:"Complaints"
     }]
 })
 const collegeModel=mongoose.model('College',collegSchema);

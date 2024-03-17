@@ -2,16 +2,23 @@ const jwt=require('jsonwebtoken');
 const userModel=require('../Models/userModel');
 const catchAsync = require("../middleware/catchAsync");
 const collegeModel = require('../Models/collegeModel');
+const compalintsModel = require('../Models/complaintsModel');
 
 //const signup user
 module.exports.signup=catchAsync(async(req,res,next)=>{
-      const user=new userModel(req.body);
+     const college=await collegeModel.findOne({name:req.body.college});
+     if(!college){
+        return res.status(404).json({
+            message:"college not found"
+        });
+     }
+     const user=new userModel({...req.body,college:college._id});
       await user.save();
       console.log(user);
-      const college=await collegeModel.findById(user.college);
       const userId=user._id;
       if(user.role=='student') college.students.push(userId);
       else college.admins.push(userId);
+      college.save();
       const token=jwt.sign({userId},process.env.JWTSECRET);
       req.userId=userId;
       res.status(201).json({
@@ -39,4 +46,22 @@ module.exports.signin=catchAsync(async(req,res,next)=>{
         message:"user Signed in successfully",
         token,
     })
-}) 
+})
+
+//register a complaint
+module.exports.registerComplaint=catchAsync(async(req,res,next)=>{
+    const user=await userModel.findById(req.user._id);
+    const college=await collegeModel.findById(req.user.college);
+    console.log(college);
+    const complaint=new compalintsModel({...req.body,user:user._id,college:college._id});
+    college.complaints.push(complaint._id);
+    user.complaints.push(complaint._id);
+    await complaint.save();
+    await user.save();
+    await college.save();
+    res.status(200).json({
+        success:true,
+        message:"complaints registerd successfully",
+    })
+})
+

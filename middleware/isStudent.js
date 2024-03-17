@@ -18,4 +18,4 @@ const isStudent=async(req,res,next)=>{
     }
       
 }
-module.exports=isStudent
+module.exports=isStudent;
