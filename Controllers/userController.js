@@ -65,3 +65,23 @@ module.exports.registerComplaint=catchAsync(async(req,res,next)=>{
     })
 })
 
+//get all complaints made by a user
+module.exports.getUserComplaints=catchAsync(async(req,res,next)=>{
+    const user=await userModel.findById(req.user._id).populate('complaints');
+    res.status(200).json({
+        success:true,
+        complaints:user.complaints,
+    })
+})
+
+//get particular complaint
+module.exports.getComplaint=catchAsync(async(req,res,next)=>{
+    const {id}=req.params;
+    const complaint=await compalintsModel.findById(id);
+    res.status(200).json({
+        success:true,
+        complaint
+    })
+})
+
+

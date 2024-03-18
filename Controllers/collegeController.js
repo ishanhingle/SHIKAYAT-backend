@@ -38,3 +38,13 @@ module.exports.getCollegeComplaints=catchAsync(async(req,res,next)=>{
         complaints:college.complaints,
     })
 })
+
+//get particular complaint
+module.exports.getComplaint=catchAsync(async(req,res,next)=>{
+    const {id}=req.params;
+    const complaint=await compalintsModel.findById(id);
+    res.status(200).json({
+        success:true,
+        complaint
+    })
+})
